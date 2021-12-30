@@ -291,18 +291,20 @@ let SearchService = class SearchService {
     }
     async normalizeResponseData(results, reverse_geocode) {
         return await results.map(result => {
-            let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
-            console.log(result);
-            let highlight;
-            if (result.highlight) {
-                console.log(result.highlight);
-                highlight = result.highlight['name1.edge_ngram.ngrams'][0];
-            }
-            if (reverse_geocode) {
-                return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight, geometry: coordinates });
+            if (result._source.geometry) {
+                let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
+                let highlight;
+                if (result.highlight) {
+                    highlight = result.highlight['name1.edge_ngram.ngrams'][0];
+                }
+                if (reverse_geocode) {
+                    return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight, geometry: coordinates });
+                }
+                else {
+                    return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight });
+                }
             }
             else {
-                return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight });
             }
         });
     }
