@@ -31,7 +31,7 @@ let SearchController = class SearchController {
         else if (latlong) {
             let latlong_array = latlong.split(',').map(l => Number(l));
             if (_.inRange(_.inRange(latlong_array[0], -90, 90.01) && latlong_array[0], -180, 180.01)) {
-                return await this.searchService.reverseGeocode(latlong_array[0], latlong_array[1], '40m');
+                return await this.searchService.reverseGeocode(latlong_array[0], latlong_array[1], '100m');
             }
         }
         else if (keywords) {
