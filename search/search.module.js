@@ -23,7 +23,11 @@ SearchModule = __decorate([
                     config_1.ConfigModule
                 ],
                 useFactory: async (configService) => ({
-                    node: 'http://localhost:9200/'
+                    auth: {
+                        username: configService.get('ES_USERNAME'),
+                        password: configService.get('ES_PASSWORD')
+                    },
+                    node: `https://${configService.get('ES_HOST')}`
                 }),
                 inject: [config_1.ConfigService],
             }),
