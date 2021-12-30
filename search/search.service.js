@@ -314,7 +314,7 @@ let SearchService = class SearchService {
             results = await this.normalizeResponseData(results.hits.hits, reverse_geocode);
             return {
                 results,
-                status: common_1.HttpStatus.OK
+                status: 'OK'
             };
         }
         catch (error) {
