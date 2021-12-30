@@ -1,0 +1,331 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SearchService = void 0;
+const common_1 = require("@nestjs/common");
+const elasticsearch_1 = require("@nestjs/elasticsearch");
+let SearchService = class SearchService {
+    constructor(elasticService) {
+        this.elasticService = elasticService;
+    }
+    async autocomplete(input, limit) {
+        let body = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.autocomplete^2",
+                                    "city^3",
+                                    "address.autocomplete^6"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        let bodyOld = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.edge_ngram.ngrams^3",
+                                    "city^3",
+                                    "address.autocomplete^6"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        let body121 = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.edge_ngram.ngrams^3",
+                                    "city^5",
+                                    "address.autocomplete^5"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        let body00 = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.edge_ngram.ngrams^3",
+                                    "city^3",
+                                    "address.autocomplete^5"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        let body10000 = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.autocomplete^3",
+                                    "address.autocomplete^6"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        let body2 = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.edge_ngram.ngrams^3",
+                                    "city^3",
+                                    "address.autocomplete^5"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ],
+                    "should": [
+                        {
+                            "term": {
+                                "name": {
+                                    "value": input,
+                                    "boost": 10
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        let body3 = {
+            "query": {
+                "bool": {
+                    "should": [
+                        {
+                            "common": {
+                                "address.autocomplete": {
+                                    "query": input,
+                                    "cutoff_frequency": 0.001,
+                                    "low_freq_operator": "and"
+                                }
+                            }
+                        },
+                        {
+                            "common": {
+                                "name": {
+                                    "query": input,
+                                    "cutoff_frequency": 0.001
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+        return await this.searchES(body);
+    }
+    async geocode(input, limit) {
+        let body = {
+            "query": {
+                "bool": {
+                    "must": [
+                        {
+                            "multi_match": {
+                                "query": input,
+                                "type": "most_fields",
+                                "fields": [
+                                    "name1.edge_ngram.ngrams^3",
+                                    "city^4",
+                                    "address.edge_ngram.ngrams^5"
+                                ],
+                                "fuzziness": "AUTO"
+                            }
+                        }
+                    ]
+                }
+            },
+            "highlight": {
+                "fields": {
+                    "name1.edge_ngram.ngrams": {}
+                }
+            },
+            "size": limit
+        };
+        return await this.searchES(body, true);
+    }
+    async reverseGeocode(lat, long, radius) {
+        let body = {
+            "query": {
+                "bool": {
+                    "must": {
+                        "match_all": {}
+                    },
+                    "filter": {
+                        "geo_distance": {
+                            "distance": radius,
+                            "geometry.coordinates": {
+                                "lat": lat,
+                                "lon": long
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        return await this.searchES(body, true);
+    }
+    async getById(id) {
+        let body = {
+            "query": {
+                "terms": {
+                    "_id": [id]
+                }
+            }
+        };
+        return await this.searchES(body, true);
+    }
+    async normalizeResponseData(results, reverse_geocode) {
+        return await results.map(result => {
+            let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
+            let highlight;
+            if (result.highlight) {
+                highlight = result.highlight['name1.edge_ngram.ngrams'][0];
+            }
+            if (reverse_geocode) {
+                return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight, geometry: coordinates });
+            }
+            else {
+                return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight });
+            }
+        });
+    }
+    async normalizeRewsponseDataOfData(results) {
+        return await results.map(result => {
+            let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
+            let highlight;
+            if (result.highlight) {
+                highlight = result.highlight['name1.edge_ngram.ngrams'][0];
+            }
+            return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight, geometry: coordinates });
+        });
+    }
+    async searchES(body, reverse_geocode) {
+        try {
+            let { body: results } = await this.elasticService.search({
+                index: process.env.ES_INDEX,
+                body,
+            });
+            results = await this.normalizeResponseData(results.hits.hits, reverse_geocode);
+            return {
+                results,
+                status: common_1.HttpStatus.OK
+            };
+        }
+        catch (error) {
+            console.log(error);
+            throw new common_1.InternalServerErrorException();
+        }
+    }
+};
+SearchService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [elasticsearch_1.ElasticsearchService])
+], SearchService);
+exports.SearchService = SearchService;
+//# sourceMappingURL=search.service.js.map
