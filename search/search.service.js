@@ -37,9 +37,9 @@ let SearchService = class SearchService {
                                 "query": input,
                                 "type": "most_fields",
                                 "fields": [
-                                    "name1.autocomplete^2",
-                                    "city^3",
-                                    "address.autocomplete^6"
+                                    "name1.edge_ngram.ngrams^3",
+                                    "city^4",
+                                    "address.edge_ngram.ngrams^5"
                                 ],
                                 "fuzziness": "AUTO"
                             }
@@ -292,8 +292,10 @@ let SearchService = class SearchService {
     async normalizeResponseData(results, reverse_geocode) {
         return await results.map(result => {
             let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
+            console.log(result);
             let highlight;
             if (result.highlight) {
+                console.log(result.highlight);
                 highlight = result.highlight['name1.edge_ngram.ngrams'][0];
             }
             if (reverse_geocode) {
