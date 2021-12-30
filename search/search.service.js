@@ -253,9 +253,6 @@ let SearchService = class SearchService {
         let body = {
             "query": {
                 "bool": {
-                    "must": {
-                        "match_all": {}
-                    },
                     "filter": {
                         "geo_distance": {
                             "distance": radius,
@@ -266,7 +263,19 @@ let SearchService = class SearchService {
                         }
                     }
                 }
-            }
+            },
+            "sort": [
+                {
+                    "_geo_distance": {
+                        "geometry.coordinates": {
+                            "lat": lat,
+                            "lon": long
+                        },
+                        "order": "asc",
+                        "unit": "m"
+                    }
+                }
+            ]
         };
         return await this.searchES(body, true);
     }
