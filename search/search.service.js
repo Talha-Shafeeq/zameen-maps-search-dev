@@ -37,9 +37,9 @@ let SearchService = class SearchService {
                                 "query": input,
                                 "type": "most_fields",
                                 "fields": [
-                                    "name1.edge_ngram.ngrams^3",
+                                    "name1.autocomplete^3",
                                     "city^4",
-                                    "address.edge_ngram.ngrams^5"
+                                    "address.autocomplete^6"
                                 ],
                                 "fuzziness": "AUTO"
                             }
