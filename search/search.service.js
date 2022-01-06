@@ -49,7 +49,7 @@ let SearchService = class SearchService {
             },
             "highlight": {
                 "fields": {
-                    "name1.edge_ngram.ngrams": {}
+                    "name1.autocomplete": {}
                 }
             },
             "size": limit
@@ -230,9 +230,9 @@ let SearchService = class SearchService {
                                 "query": input,
                                 "type": "most_fields",
                                 "fields": [
-                                    "name1.edge_ngram.ngrams^3",
+                                    "name1.autocomplete^3",
                                     "city^4",
-                                    "address.edge_ngram.ngrams^5"
+                                    "address.autocomplete^6"
                                 ],
                                 "fuzziness": "AUTO"
                             }
@@ -242,7 +242,7 @@ let SearchService = class SearchService {
             },
             "highlight": {
                 "fields": {
-                    "name1.edge_ngram.ngrams": {}
+                    "name1.autocomplete": {}
                 }
             },
             "size": limit
@@ -295,7 +295,7 @@ let SearchService = class SearchService {
                 let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
                 let highlight;
                 if (result.highlight) {
-                    highlight = result.highlight['name1.edge_ngram.ngrams'][0];
+                    highlight = result.highlight['name1.autocomplete'][0];
                 }
                 if (reverse_geocode) {
                     return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight, geometry: coordinates });
@@ -313,7 +313,7 @@ let SearchService = class SearchService {
             let _a = result._source, { name, address, name1, address1, geometry: { coordinates } } = _a, remainings = __rest(_a, ["name", "address", "name1", "address1", "geometry"]);
             let highlight;
             if (result.highlight) {
-                highlight = result.highlight['name1.edge_ngram.ngrams'][0];
+                highlight = result.highlight['name1.autocomplete'][0];
             }
             return Object.assign(Object.assign({ name }, remainings), { address: address1, highlight, geometry: coordinates });
         });
