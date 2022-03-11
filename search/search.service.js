@@ -53,7 +53,7 @@ let SearchService = class SearchService {
                             },
                             {
                                 "match": {
-                                    "city": society
+                                    "society": society
                                 }
                             }
                         ]
