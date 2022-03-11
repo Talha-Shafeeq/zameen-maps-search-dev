@@ -27,197 +27,69 @@ let SearchService = class SearchService {
     constructor(elasticService) {
         this.elasticService = elasticService;
     }
-    async autocomplete(input, limit) {
-        let body = {
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": input,
-                                "type": "most_fields",
-                                "fields": [
-                                    "name1.autocomplete^3",
-                                    "city^4",
-                                    "address.autocomplete^6"
-                                ],
-                                "fuzziness": "AUTO"
-                            }
-                        }
-                    ]
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "name1.autocomplete": {}
-                }
-            },
-            "size": limit
-        };
-        let bodyOld = {
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": input,
-                                "type": "most_fields",
-                                "fields": [
-                                    "name1.edge_ngram.ngrams^3",
-                                    "city^3",
-                                    "address.autocomplete^6"
-                                ],
-                                "fuzziness": "AUTO"
-                            }
-                        }
-                    ]
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "name1.edge_ngram.ngrams": {}
-                }
-            },
-            "size": limit
-        };
-        let body121 = {
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": input,
-                                "type": "most_fields",
-                                "fields": [
-                                    "name1.edge_ngram.ngrams^3",
-                                    "city^5",
-                                    "address.autocomplete^5"
-                                ],
-                                "fuzziness": "AUTO"
-                            }
-                        }
-                    ]
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "name1.edge_ngram.ngrams": {}
-                }
-            },
-            "size": limit
-        };
-        let body00 = {
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": input,
-                                "type": "most_fields",
-                                "fields": [
-                                    "name1.edge_ngram.ngrams^3",
-                                    "city^3",
-                                    "address.autocomplete^5"
-                                ],
-                                "fuzziness": "AUTO"
-                            }
-                        }
-                    ]
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "name1.edge_ngram.ngrams": {}
-                }
-            },
-            "size": limit
-        };
-        let body10000 = {
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": input,
-                                "type": "most_fields",
-                                "fields": [
-                                    "name1.autocomplete^3",
-                                    "address.autocomplete^6"
-                                ],
-                                "fuzziness": "AUTO"
-                            }
-                        }
-                    ]
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "name1.edge_ngram.ngrams": {}
-                }
-            },
-            "size": limit
-        };
-        let body2 = {
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "multi_match": {
-                                "query": input,
-                                "type": "most_fields",
-                                "fields": [
-                                    "name1.edge_ngram.ngrams^3",
-                                    "city^3",
-                                    "address.autocomplete^5"
-                                ],
-                                "fuzziness": "AUTO"
-                            }
-                        }
-                    ],
-                    "should": [
-                        {
-                            "term": {
-                                "name": {
-                                    "value": input,
-                                    "boost": 10
-                                }
-                            }
-                        }
-                    ]
-                }
-            },
-            "highlight": {
-                "fields": {
-                    "name1.edge_ngram.ngrams": {}
-                }
-            },
-            "size": limit
-        };
-        let body3 = {
-            "query": {
-                "bool": {
-                    "should": [
-                        {
-                            "common": {
-                                "address.autocomplete": {
+    async autocomplete(input, limit, city) {
+        let body;
+        if (city) {
+            body = {
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "multi_match": {
                                     "query": input,
-                                    "cutoff_frequency": 0.001,
-                                    "low_freq_operator": "and"
+                                    "type": "most_fields",
+                                    "fields": [
+                                        "name1.autocomplete^3",
+                                        "city^4",
+                                        "address.autocomplete^6"
+                                    ],
+                                    "fuzziness": "AUTO"
+                                }
+                            },
+                            {
+                                "match": {
+                                    "city": city
                                 }
                             }
-                        },
-                        {
-                            "common": {
-                                "name": {
+                        ]
+                    }
+                },
+                "highlight": {
+                    "fields": {
+                        "name1.autocomplete": {}
+                    }
+                },
+                "size": limit
+            };
+        }
+        else {
+            body = {
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "multi_match": {
                                     "query": input,
-                                    "cutoff_frequency": 0.001
+                                    "type": "most_fields",
+                                    "fields": [
+                                        "name1.autocomplete^3",
+                                        "city^4",
+                                        "address.autocomplete^6"
+                                    ],
+                                    "fuzziness": "AUTO"
                                 }
                             }
-                        }
-                    ]
-                }
-            }
-        };
+                        ]
+                    }
+                },
+                "highlight": {
+                    "fields": {
+                        "name1.autocomplete": {}
+                    }
+                },
+                "size": limit
+            };
+        }
         return await this.searchES(body);
     }
     async geocode(input, limit) {
@@ -278,6 +150,24 @@ let SearchService = class SearchService {
             ]
         };
         return await this.searchES(body, true);
+    }
+    async getAllCities() {
+        let body = {
+            "size": 0,
+            "aggs": {
+                "cities": {
+                    "terms": {
+                        "field": "city",
+                        "size": 500
+                    }
+                }
+            }
+        };
+        const { body: { aggregations } } = await this.elasticService.search({
+            index: process.env.ES_INDEX,
+            body,
+        });
+        return aggregations.cities.buckets.map(city => city.key);
     }
     async getById(id) {
         let body = {

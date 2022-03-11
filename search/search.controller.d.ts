@@ -2,7 +2,7 @@ import { SearchService } from './search.service';
 export declare class SearchController {
     private readonly searchService;
     constructor(searchService: SearchService);
-    search(keywords: string): Promise<{
+    search(keywords: string, city: string): Promise<{
         results: Record<string, any>;
         status: string;
     }>;
@@ -10,4 +10,5 @@ export declare class SearchController {
         results: Record<string, any>;
         status: string;
     }>;
+    cities(): Promise<any>;
 }

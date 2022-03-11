@@ -21,8 +21,8 @@ let SearchController = class SearchController {
     constructor(searchService) {
         this.searchService = searchService;
     }
-    async search(keywords) {
-        return await this.searchService.autocomplete(keywords, 10);
+    async search(keywords, city) {
+        return await this.searchService.autocomplete(keywords, 10, city);
     }
     async geocode(keywords, place_id, latlong) {
         if (place_id) {
@@ -38,16 +38,25 @@ let SearchController = class SearchController {
             return await this.searchService.geocode(keywords, 10);
         }
     }
+    async cities() {
+        return this.searchService.getAllCities();
+    }
 };
 __decorate([
     (0, swagger_1.ApiQuery)({
         name: 'keywords',
         example: 'Lahore'
     }),
+    (0, swagger_1.ApiQuery)({
+        name: 'city',
+        example: 'Lahore',
+        required: false
+    }),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('keywords')),
+    __param(1, (0, common_1.Query)('city')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], SearchController.prototype, "search", null);
 __decorate([
@@ -74,6 +83,12 @@ __decorate([
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], SearchController.prototype, "geocode", null);
+__decorate([
+    (0, common_1.Get)('/cities'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], SearchController.prototype, "cities", null);
 SearchController = __decorate([
     (0, swagger_1.ApiTags)('Search'),
     (0, common_1.Controller)('search'),
