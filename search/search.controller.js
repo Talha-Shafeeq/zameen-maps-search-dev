@@ -41,6 +41,9 @@ let SearchController = class SearchController {
     async cities() {
         return this.searchService.getAllCities();
     }
+    async societies(city) {
+        return this.searchService.getSocitiesOfCities(city);
+    }
 };
 __decorate([
     (0, swagger_1.ApiQuery)({
@@ -89,6 +92,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], SearchController.prototype, "cities", null);
+__decorate([
+    (0, common_1.Get)('/:city/societies'),
+    __param(0, (0, common_1.Param)('city')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], SearchController.prototype, "societies", null);
 SearchController = __decorate([
     (0, swagger_1.ApiTags)('Search'),
     (0, common_1.Controller)('search'),

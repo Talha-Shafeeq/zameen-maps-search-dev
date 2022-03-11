@@ -158,7 +158,7 @@ let SearchService = class SearchService {
                 "cities": {
                     "terms": {
                         "field": "city",
-                        "size": 500
+                        "size": 10
                     }
                 }
             }
@@ -168,6 +168,23 @@ let SearchService = class SearchService {
             body,
         });
         return aggregations.cities.buckets.map(city => city.key);
+    }
+    async getSocitiesOfCities(city) {
+        let body = {
+            "size": 1000,
+            "query": {
+                "term": {
+                    "city": {
+                        "value": city
+                    }
+                }
+            }
+        };
+        const { body: { hits } } = await this.elasticService.search({
+            index: 'socities',
+            body,
+        });
+        return hits.hits.map(s => (s._source.society));
     }
     async getById(id) {
         let body = {

@@ -11,4 +11,5 @@ export declare class SearchController {
         status: string;
     }>;
     cities(): Promise<any>;
+    societies(city: string): Promise<any>;
 }
