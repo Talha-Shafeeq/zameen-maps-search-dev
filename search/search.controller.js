@@ -21,8 +21,8 @@ let SearchController = class SearchController {
     constructor(searchService) {
         this.searchService = searchService;
     }
-    async search(keywords, city) {
-        return await this.searchService.autocomplete(keywords, 10, city);
+    async search(keywords, city, society) {
+        return await this.searchService.autocomplete(keywords, 10, city, society);
     }
     async geocode(keywords, place_id, latlong) {
         if (place_id) {
@@ -55,11 +55,16 @@ __decorate([
         example: 'Lahore',
         required: false
     }),
+    (0, swagger_1.ApiQuery)({
+        name: 'society',
+        required: false
+    }),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('keywords')),
     __param(1, (0, common_1.Query)('city')),
+    __param(2, (0, common_1.Query)('society')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], SearchController.prototype, "search", null);
 __decorate([

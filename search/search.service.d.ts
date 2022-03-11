@@ -2,7 +2,7 @@ import { ElasticsearchService } from '@nestjs/elasticsearch';
 export declare class SearchService {
     private readonly elasticService;
     constructor(elasticService: ElasticsearchService);
-    autocomplete(input: string, limit: number, city?: string): Promise<{
+    autocomplete(input: string, limit: number, city?: string, society?: string): Promise<{
         results: Record<string, any>;
         status: string;
     }>;

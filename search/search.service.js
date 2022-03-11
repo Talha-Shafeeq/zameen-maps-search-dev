@@ -27,9 +27,47 @@ let SearchService = class SearchService {
     constructor(elasticService) {
         this.elasticService = elasticService;
     }
-    async autocomplete(input, limit, city) {
+    async autocomplete(input, limit, city, society) {
         let body;
-        if (city) {
+        if (city && society) {
+            body = {
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "multi_match": {
+                                    "query": input,
+                                    "type": "most_fields",
+                                    "fields": [
+                                        "name1.autocomplete^3",
+                                        "city^4",
+                                        "address.autocomplete^6"
+                                    ],
+                                    "fuzziness": "AUTO"
+                                }
+                            },
+                            {
+                                "match": {
+                                    "city": city
+                                }
+                            },
+                            {
+                                "match": {
+                                    "city": society
+                                }
+                            }
+                        ]
+                    }
+                },
+                "highlight": {
+                    "fields": {
+                        "name1.autocomplete": {}
+                    }
+                },
+                "size": limit
+            };
+        }
+        else if (city) {
             body = {
                 "query": {
                     "bool": {
