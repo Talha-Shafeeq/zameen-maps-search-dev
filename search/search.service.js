@@ -53,7 +53,7 @@ let SearchService = class SearchService {
                             },
                             {
                                 "match": {
-                                    "society": society
+                                    "society_filter": society
                                 }
                             }
                         ]
@@ -212,17 +212,20 @@ let SearchService = class SearchService {
             "size": 1000,
             "query": {
                 "term": {
-                    "city": {
+                    "city.keyword": {
                         "value": city
                     }
                 }
+            },
+            "collapse": {
+                "field": "society_filter.keyword"
             }
         };
         const { body: { hits } } = await this.elasticService.search({
-            index: 'socities',
+            index: 'areas',
             body,
         });
-        return hits.hits.map(s => (s._source.society));
+        return hits.hits.map(s => (s._source.society_filter));
     }
     async getById(id) {
         let body = {

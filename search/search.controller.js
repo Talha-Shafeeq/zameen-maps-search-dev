@@ -59,6 +59,10 @@ __decorate([
         name: 'society',
         required: false
     }),
+    (0, swagger_1.ApiQuery)({
+        name: 'society_filter',
+        required: false
+    }),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('keywords')),
     __param(1, (0, common_1.Query)('city')),
