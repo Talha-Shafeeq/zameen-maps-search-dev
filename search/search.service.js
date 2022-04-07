@@ -207,7 +207,7 @@ let SearchService = class SearchService {
         });
         return aggregations.cities.buckets.map(city => city.key);
     }
-    async getSocitiesOfCities(city) {
+    async getSocitiesOfCities(city, area) {
         let body = {
             "size": 1000,
             "query": {
@@ -221,6 +221,32 @@ let SearchService = class SearchService {
                 "field": "society_filter.keyword"
             }
         };
+        if (area) {
+            body = {
+                "size": 10,
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "term": {
+                                    "city.keyword": {
+                                        "value": city
+                                    }
+                                }
+                            },
+                            {
+                                "match": {
+                                    "society_filter": area
+                                }
+                            }
+                        ]
+                    }
+                },
+                "collapse": {
+                    "field": "society_filter.keyword"
+                }
+            };
+        }
         const { body: { hits } } = await this.elasticService.search({
             index: 'areas',
             body,

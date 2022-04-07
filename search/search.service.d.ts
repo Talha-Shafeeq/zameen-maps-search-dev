@@ -15,7 +15,7 @@ export declare class SearchService {
         status: string;
     }>;
     getAllCities(): Promise<any>;
-    getSocitiesOfCities(city: any): Promise<any>;
+    getSocitiesOfCities(city: any, area?: string): Promise<any>;
     getById(id: any): Promise<{
         results: Record<string, any>;
         status: string;
